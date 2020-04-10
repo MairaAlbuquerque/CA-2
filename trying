@@ -1,24 +1,35 @@
-price = {'EUR':1, 'USD': 1.23, 'BLR': 5.6}
+class Products:
+    def __init__(self, description, seller, price, curr):
+        self.description = description
+        self.seller = seller
+        self.price = price
+        self.curr = curr
+        
+Products = {a:('suitcase', 'paul', 65, 'EUR'),
+            b:('suitcase', 'maira', 80, 'EUR'),
+            c:('earphones', 'wayne', 10, 'EUR'),
+            d:('earphones', 'paul', 8, 'USD'),
+            e: ('jeans', 'maira', 5, 'CAD'}
+            
+        
+prices = {'EUR':1, 'USD':1.23, 'CAD':1.56}
 
 class Basket:
     def __init__(self):
         self.__shoppingBasket = {}
-   
-    def add_item(self, desc, seller, price, qty):
-        self.__shoppingBasket[desc]=self.getBasket(desc)+qty
-        self.__seller = seller
-        self.__price = price
-    
-    def remove_item(self, desc, seller, price, qty):
-        self.__shoppingBasket[desc]=self.getBasket(desc)-qty
-    
-    def getBasket(self, desc):
-        if desc not in self.__shoppingBasket:
+        
+    def add_item(self, sku, qty):
+        self.__shoppingBasket[sku]=self.getBalance_items(sku)+qty
+        
+    def remove_item(self, sku, qty):
+        self.__shoppingBasket[sku]=self.getBalance_items(sku)-qty
+        
+    def getBalance_items(self, sku):
+        if sku not in self.__shoppingBasket:
             return 0
-        return self.__shoppingBasket[desc]
+        return self.__shoppingBasket[sku]
     
-    def value(self):
-        total = 0
-        for k, v in self.__shoppingBasket.items():
-            total += v*price[k]
-            return total
+    def getValue(self, sku):    #not multiplies by prices(rates)
+        if sku not in self.__shoppingBasket:
+            return 0            
+        sku.price*self.__shoppingBasket[sku]
