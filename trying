@@ -1,18 +1,12 @@
 class Products:
-    def init(self, description, seller, price, curr):
+    def __init__(self, description, seller, price, curr):
         self.description = description
         self.seller = seller
         self.price = price
         self.curr = curr
-        
-# Products = {a:('suitcase', 'paul', 65, 'EUR'),                     // I guess the products are not being created due to error. Infact you
-           # b:('suitcase', 'maira', 80, 'EUR'),                       should create Products below. I tried sorting yours! Try testing this: 
-           # c:('earphones', 'wayne', 10, 'EUR'),                    
-           # d:('earphones', 'paul', 8, 'USD'),
-           # e: ('jeans', 'maira', 5, 'CAD'}
             
         
-prices = {'EUR':1, 'USD':1.23, 'CAD':1.56}
+prices = {1:"EUR", 1.23:"USD", 1.56:"CAD"}
 
 class Basket:
     def __init__(self):
@@ -20,33 +14,47 @@ class Basket:
         
     def add_item(self, sku, qty):
         self.__shoppingBasket[sku]=self.getBalance_items(sku)+qty
+        print(self.__shoppingBasket)
         
     def remove_item(self, sku, qty):
-        self.__shoppingBasket[sku]=self.getBalance_items(sku)-qty
+        try:
+            self.__shoppingBasket[sku]=self.getBalance_items(sku)-qty
+        except KeyError:
+            print("Key Not Found")
         
     def getBalance_items(self, sku):
         if sku not in self.__shoppingBasket:
             return 0
         return self.__shoppingBasket[sku]
     
-    def getValue(self, sku):    #not multiplies by prices(rates)
+    def getValue(self, sku, products):    #not multiplies by prices(rates) yet
         if sku not in self.__shoppingBasket:
-            return 0            
-        sku.price*self.__shoppingBasket[sku]
+            return 0
         
-      --------------------------------------------------------------------------------------------------------------------  
-       Testing:
-       
-       test=Products()
-       Product1=test.init("suitcase","Arnotts",23,"EUR")
-       Product2=test.init("pillows","Arnotts",34,"EUR")
-       
-       MyCase= Basket()
-       MyCase.add_item("suitcase", 1)
-       MyCase.add_item("pillows", 2)
-       
-       print( MyCase.getBalance_items("suitcase"))
-       
+        for product in products:
+            if product.description == sku:
+                return self.__shoppingBasket[sku]*product.price
         
+-------------------------------------------------------------------------------------------------------------------------        
+#Testing:
+       
+product1=Product("suitcase","Arnotts",23,"EUR")
+product2=Product("pillows","Arnotts",34,"EUR")
+product3=Product("duvet", "Dunnes", 30, "EUR")
+product4=Product("coverduvet", "Amazon", 20, "USD")
+
+products=[product1, product2, product3, product4]
+
+for sku in products:
+    print(sku.description +", " + sku.seller + ", " + str(sku.price) + ", " + sku.curr )
         
+MyCase= Basket()
+MyCase.add_item("suitcase", 1)
+MyCase.add_item("pillows", 2)
+MyCase.add_item("duvet", 1)
+
+print(MyCase.getBalance_items("suitcase"))
+
+print(MyCase.getValue("suitcase", products))
+print(MyCase.getValue("pillows", products))
         
